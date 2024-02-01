@@ -1,12 +1,6 @@
 <!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
 <a name="readme-top"></a>
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Don't forget to give the project a star!
-*** Thanks again! Now go create something AMAZING! :D
--->
+<!-- -->
 
 
 
@@ -59,8 +53,7 @@
     <li>
       <a href="#about-the-project">About The Project</a>
       <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
+        </ul>
     </li>
     <li>
       <a href="#getting-started">Getting Started</a>
@@ -82,9 +75,15 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+This project uses the serial monitor to get inputs from the user of the measured values from an Xray meter to make a prediction about the mean energy of the Xray machine.
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `Kawoogie`, `Arduino_Xray_ML_Prediction`, `llinkedin.com/in/lee-sikstrom-a6472a113`,  `Arduino Xray Mean Energy ML Prediction`, `This code takes three input values from an X-ray detector and uses machine learning to predict the mean energy value of the X-ray.`
+This code uses the output of the tinyML gen package for Python to make machine learning predictions on an Arduino Nano 33 BLE Sense Lite.
+
+Here is the tinyML gen repository:
+https://github.com/eloquentarduino/tinymlgen
+
+The above repository uses Python to generate C code for running a machine learning model on a microprocessor. This is what generated the RandomForest.h model
+included in this repository.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -94,31 +93,24 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+This code is written for the Arduino Nano 33 BLE Sense Lite.
+
+You will also need the two files in the code section of this repository as well as the Arduino IDE.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+
+The header file containing the machine learning model needs to be downloaded and imported into your sketch.
+   ```sh
+   #include "RandomForest.h" // Load the header file with the model
+   ```
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+The machine learning model is initialized from the included header file with this command:
    ```sh
-   git clone https://github.com/Kawoogie/Arduino_Xray_ML_Prediction.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
+   // Initialize the model
+   Eloquent::ML::Port::RandomForestRegressor mlmodel;
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -128,9 +120,18 @@ This is an example of how to list things you need to use the software and how to
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+The prediction is being done with this command:
+   ```sh
+   mlmodel.predict(inputData)
+   ```
+To input data for the model to make a prediction on, it must be entered through the serial monitor in this format:
+   ```sh
+   [float, float, float]
+   ```
+With the float values ranging between 0.0 and 1.0.
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+The output of the machine learning model is an estimation of the mean energy of the X-ray in a float value. 
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
